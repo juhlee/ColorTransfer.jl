@@ -2,7 +2,7 @@
 
 ### Student name : Ju Hyung Lee
 
-![alt text](https://github.com/juhlee/ColorTransfer.jl/blob/master/figs/choosing-color-scheme-368x246.png)
+![alt text](https://github.com/juhlee/ColorTransfer.jl/blob/ColorTransfer/figs/choosing-color-scheme-368x246.png)
 
 <h2> Welcome to the "ColorTransfer" repository in STMO zoo! </h2>
 
@@ -20,7 +20,7 @@ By saying **"a different way"**, you will see:
 
 All the necessary codes are in **notebook/colortransfer.jl** (Stand-alone pluto notebook)
 
-![alt text](https://github.com/juhlee/ColorTransfer.jl/blob/master/figs/nutshell.png)
+![alt text](https://github.com/juhlee/ColorTransfer.jl/blob/ColorTransfer/figs/nutshell.png)
 
 If you run the notebooks/colortransfer.jl code, you will see how the two images in the figure above swap the color schemes!
 
