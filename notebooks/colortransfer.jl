@@ -460,7 +460,7 @@ if typeof(image1file) == Dict{Any, Any} # FilePicker parses in the form of Dict(
 	image1 = load_image(image1file)
 else
 	# If no input from the FilePicker, we will use cityscape photo as default!
-	image1 = Resource("../figs/cityscape.jpg")
+	image1 = load("../figs/cityscape.jpg")
 end
 
 # ╔═╡ 2544a424-6730-49a5-949c-f56fb4fad413
