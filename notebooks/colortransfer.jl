@@ -423,12 +423,6 @@ md"""
 # ╔═╡ f44ee7f6-b903-4b00-89ba-91b6039d3c73
 md""" --- """
 
-# ╔═╡ 96017dc5-8727-4ec3-bd5a-9e8226930d18
-Resource("https://github.com/juhlee/ColorTransfer.jl/tree/ColorTransfer/figs/sunset.jpg")
-
-# ╔═╡ d8bfb440-93bf-4a88-9170-ec79bd1edc9e
-Resource("https://julialang.org/assets/infra/logo.svg")
-
 # ╔═╡ ddbab8c0-1440-4027-b1f4-0f083448a17e
 md"""
 ## Appendix (source code)
@@ -2339,8 +2333,6 @@ version = "0.9.1+5"
 # ╟─e962d9cc-00a3-4e45-88c6-3b81e90d28c3
 # ╟─0b6c5422-7cd7-47cd-b091-6307e7ae5303
 # ╟─f44ee7f6-b903-4b00-89ba-91b6039d3c73
-# ╠═96017dc5-8727-4ec3-bd5a-9e8226930d18
-# ╠═d8bfb440-93bf-4a88-9170-ec79bd1edc9e
 # ╟─ddbab8c0-1440-4027-b1f4-0f083448a17e
 # ╠═8131f7cf-7027-4168-b41e-e75a4001a2a5
 # ╠═3038def5-3c91-4a2d-90f3-d4c827d63ce0
