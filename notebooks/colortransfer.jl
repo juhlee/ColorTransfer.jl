@@ -37,7 +37,7 @@ md""" --- """
 md"""
 ##
 
-In chapter 6, we learned the concept of **optimal transportation**, and learned that **color transfer** is one of the applications.
+In chapter 6, we learned the concept of **optimal transportation**, and saw that **color transfer** is one of the applications (we had an exercise on it).
 
 !!! note "Color Transfer Problem 🟥🟧🟨🟩🟦🟪"
 
@@ -49,8 +49,8 @@ md"""
 ##### What to expect different from the one we implemented in the course?
 
 - The images will be processed in form of an **Array** (Height x Width x Channels) instead of a complete dependence on the package Colors.jl.
-- The color schemees in the images are **clustered**.
-- Thus, codes run **much faster** even **without sub-sampling** the photos.
+- The color schemees in the images are **clustered** = instead of the whole pixels, only the clustered color schemes go through optimal transportation.
+- Thus, codes run **much faster** even **without sub-sampling** of the images.
 - Different ways to calculate the color differences **(distances)**
 - Different **weights** assigned to each pixels, whereas we gave an uniform distribution in the course.
 """
@@ -66,8 +66,8 @@ By default, you will use two photos in the **figs/** folder  in this project.
 
 The two sample photos below are taken by myself, showing the cityscapes of Seoul in South Korea:
 
-- The first image was taken during daytime.
-- The second one was taken during sunset.
+- The first image was taken during daytime. 🏙️
+- The second one was taken during sunset. 🌇
 
 How would the **first image** look like during **sunset**? 
 
@@ -85,17 +85,17 @@ md"""
 md"""
 #### 0.1. Or, use images of your own preference! 
 
-To make things convenient, I have made a file upload box below.
+- To make things convenient, I have made a file upload box below.
 
-You can load different images that you would like to try out!
+- You can load different images that you would like to try out!
 
 !!! danger "⛔ Attention! ⛔"
 
 	**Please first place the desired images in the following path "ColorTransfer.jl/figs/" before selecting them using the filepicker below.**
 
-Due to limitations in PlutoUI and julia, the filepath of selected images could not be fully tracked (critical...). 
+- Due to limitations in PlutoUI and julia, the filepath of selected images could not be fully tracked (critical...). 
 
-You may doubt the point of using FilePicker() if the files had to be transferred to a certain directory before selecting it, but I wanted to try the GUI features in pluto notebook..
+- You may doubt the point of using FilePicker() if the files had to be transferred to a certain directory before selecting it, but I wanted to try the GUI features in pluto notebook..
 """
 
 # ╔═╡ 4118339f-b3a1-4d89-8bbc-54fae475ae4c
@@ -450,12 +450,18 @@ function load_image(x)
 end
 
 # ╔═╡ 45264041-09d3-412c-a2ff-50c4bdc29039
-if typeof(image1file) == Dict{Any, Any} # FilePicker parses in the form of Dict()
+# if a custom image is selected from the FilePicker above, load that image
+if typeof(image1file) == Dict{Any, Any}
 	image1 = load_image(image1file)
 else
 	# If no input from the FilePicker, we will use cityscape photo as default!
-	image1url = download("https://github.com/juhlee/imagebank/blob/main/cityscape.jpg?raw=true")
-	image1 = load(image1url)
+	try
+		image1 = load("../figs/cityscape.jpg")
+	catch
+		# If local directory does not work, try online catch.
+		image1url = download("https://github.com/juhlee/imagebank/blob/main/cityscape.jpg?raw=true")
+		image1 = load(image1url)
+	end
 end
 
 # ╔═╡ 2544a424-6730-49a5-949c-f56fb4fad413
@@ -467,8 +473,12 @@ if typeof(image2file) == Dict{Any, Any}
 	image2 = load_image(image2file)
 else
 	# Else, we use sunset photography as default!
-	image2url = download("https://github.com/juhlee/imagebank/blob/main/sunset.jpg?raw=true")
-	image2 = load(image2url)
+	try
+		image2 = load("../figs/sunset.jpg")
+	catch
+		image2url = download("https://github.com/juhlee/imagebank/blob/main/sunset.jpg?raw=true")
+		image2 = load(image2url)
+	end
 end
 
 # ╔═╡ ff0da56a-5e85-4a61-a26c-787b0ca096f4
@@ -552,7 +562,7 @@ function image_to_3d_array(image::Matrix)
 	img_array = channelview(image)
 
 	# channelveiw() shows the array in dimensions channels x width x height.
-	# For the subsequent experiment, we convert this to chaneels x (width * height)
+	# We convert this to height x width x channels.
 	img_array = permutedims(img_array, (2,3,1))
 
 	return img_array
@@ -2249,8 +2259,8 @@ version = "0.9.1+5"
 # ╟─3743764b-d8d3-471d-8398-e296aad2d567
 # ╟─16ce4192-f580-46ba-80da-ac44cb13ba3b
 # ╟─c6b74f81-e41a-449c-9be3-4f2dbfc34301
-# ╠═2544a424-6730-49a5-949c-f56fb4fad413
-# ╠═ff0da56a-5e85-4a61-a26c-787b0ca096f4
+# ╟─2544a424-6730-49a5-949c-f56fb4fad413
+# ╟─ff0da56a-5e85-4a61-a26c-787b0ca096f4
 # ╟─ad83b6f3-98fa-4568-ae23-43ab9813a9fd
 # ╟─ac92d0ae-4641-4981-aab2-b63c04826119
 # ╠═d3755b9c-6682-4907-ad1f-510a117eae5e
