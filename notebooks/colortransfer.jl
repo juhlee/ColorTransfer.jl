@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.17.3
+# v0.17.4
 
 using Markdown
 using InteractiveUtils
@@ -25,7 +25,7 @@ md"""
 """
 
 # ╔═╡ adf59de3-bc73-4d4c-9293-47a2f8569ee5
-imresize(load("../figs/colors_everywhere.jpg"), (280, 350))
+imresize(load("../figs/colors_everywhere.jpg"), (350, 450))
 
 # ╔═╡ 877f1fc5-2acd-48ad-87e3-0f28d9c9c9c7
 TableOfContents(title="Table of Contents 🔬", depth=2, aside=true)
@@ -73,7 +73,7 @@ How would the **first image** look like during **sunset**?
 
 How would the **second image** look like during **daytime**?
 
-Could this project predict such points well through the color transport using optimal transport?
+Could this project predict those situations well through the color transport using optimal transport?
 """
 
 # ╔═╡ dc7c112b-7213-4746-b86e-8cbbb8130a01
@@ -93,7 +93,7 @@ md"""
 
 	**Please first place the desired images in the following path "ColorTransfer.jl/figs/" before selecting them using the filepicker below.**
 
-- Due to limitations in PlutoUI and julia, the filepath of selected images could not be fully tracked (critical...). 
+- Due to limitations in PlutoUI and julia, the filepath of selected images could not be fully tracked (Apologize... I did my best here). 
 
 - You may doubt the point of using FilePicker() if the files had to be transferred to a certain directory before selecting it, but I wanted to try the GUI features in pluto notebook..
 """
@@ -154,10 +154,7 @@ md"""
 md"""
 ## 2. Clustering the images using K-means clustering
 
-- From clustering.jl package, k-means clustering function **kmeans()** was used to cluster the 2D-array of images.
-- This is the **most computaionally expensive step** among this notebook.
-- Below in *Section 3*, you can experiment the different outcomes depending on the input number of clusters, but be aware of the runtime for **n_clusters > 50**.
-- Relatively takes more time, but not that long.
+- From **clustering.jl** package, k-means clustering function **kmeans()** was used to cluster the 2D-array of images.
 """
 
 # ╔═╡ 69addbcd-6158-4193-b4ef-b432d71912d5
@@ -228,16 +225,17 @@ md"""
 **Number of clusters for k-means clustering**
 
 - Depending on the **n_cluster** value, the compression in the colors will be different.
-- For the sample images, 30 clusteres seemed enough to compensate between fast calculation and decent image quality. 
-"""
 
-# ╔═╡ 3582f1c8-a5ee-4c38-86a3-56bca198471f
-@bind n_cluster confirm(Slider(1:1:100; default=30, show_value=true))
+!!! note "Different values of n_cluster"
+	- For quick run of the code upon the first opening of the notebook, I set the default **n\_cluster** to 30 (decent image quality, fast run). I highly recommend you also try higher values n_cluster for a much better quality. It may take more time, but not that much!
+
+$@bind n_cluster confirm(Slider(1:1:100; default=30, show_value=true))
+"""
 
 # ╔═╡ fc223699-6de3-460c-a116-8121bed96dfe
 md"""
-- Clustering takes a few seconds, which is slightly bothersome to play around with.
-- Modify the Slider to a desired value, and press "Confirm" if you want to apply the new cluster value
+- Modify the Slider to a desired value, and press "Confirm" if you want to apply the new cluster value.
+- (Added "confirm" button because clustering takes a few seconds.. take your time to carefully set the slider to your desired value!)
 """
 
 # ╔═╡ ec4795e5-7c10-4b93-95a4-0a6890fc0386
@@ -359,7 +357,7 @@ md"""
 
 # ╔═╡ 77c07e75-c6db-4106-8d04-44b619d70465
 md"""
-**Epsilon (ϵ)**
+**Epsilon (ϵ)** -> Depends... it could add/reduce contrast to the images.
 """
 
 # ╔═╡ 2901b354-1e4f-432a-a4b1-5b5e37cee104
@@ -657,8 +655,9 @@ end
 
 # ╔═╡ 32c2ac0a-d0ca-4002-8c03-9f0448ac418a
 begin
-	# You could also try KLdivergence
 	# as described in the below sub-section 4.1.1.
+	# you could try two formulas: Sqeuclidean and KLdivergence
+	# Could've been better if PlutoUI could bind functions...
 	distance_formula = Sqeuclidean
 	
 	# cost matrix between color schemes of two images
@@ -768,6 +767,12 @@ colorscatter(colors; kwargs...) =
 	# Check if the image loaded is in the RGB color space
 	@test typeof(a_img) == Matrix{RGB{N0f8}}
 
+	# Test if local directory works
+	a_filename_2 = dirname(@__DIR__) * "/figs/nutshell.png"
+	a_img2 = load(a_filename_2)
+	a_img2 = RGB.(a_img2)
+	@test a_img2 == a_img
+	
 	# Check if the image_to_3Darray gives a 3D array with width x height x channel
 	a_array = image_to_3d_array(a_img)
 	@test length(size(a_array)) == 3
@@ -2292,7 +2297,6 @@ version = "0.9.1+5"
 # ╟─2ace44bb-085e-4979-b2d7-c21272df21d6
 # ╟─4dbae5a4-1417-49c8-800c-227d37ad1f8f
 # ╟─4b9955f2-0900-41c7-aecc-193477f9ac7f
-# ╟─3582f1c8-a5ee-4c38-86a3-56bca198471f
 # ╟─fc223699-6de3-460c-a116-8121bed96dfe
 # ╟─ec4795e5-7c10-4b93-95a4-0a6890fc0386
 # ╟─fd03fd37-2e16-40f5-a933-4991c913d420
