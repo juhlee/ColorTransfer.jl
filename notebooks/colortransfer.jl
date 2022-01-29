@@ -26,8 +26,12 @@ md"""
 
 # ╔═╡ adf59de3-bc73-4d4c-9293-47a2f8569ee5
 begin
-	imurl = "https://github.com/juhlee/imagebank/blob/main/colors_everywhere.jpg?raw=true"
-	imresize(load(download(imurl)), (350, 450))
+	try
+		imresize(load("../figs/colors_everywhere.jpg"), (350, 450))
+	catch
+		imurl = "https://github.com/juhlee/imagebank/blob/main/colors_everywhere.jpg?raw=true"
+		imresize(load(download(imurl)), (350, 450))
+	end
 end
 
 # ╔═╡ 877f1fc5-2acd-48ad-87e3-0f28d9c9c9c7
@@ -289,9 +293,9 @@ md"""
 
 # ╔═╡ 2fd226fd-0ebd-4e0f-8509-d0a788c2de73
 md"""
-!!! note
+!!! note "Only two formulas?"
 
-	A number of different formulas exist for distance calculation. However, after experimenting, these two provided the most contrasting results.
+	Several different formulas exist for distance calculation. However, after experimenting, these two provided the most contrasting results.
 """
 
 # ╔═╡ df9010db-0565-43d5-b926-164d96ca400f
@@ -323,6 +327,7 @@ md"""
 #### 4.3. Optimal transport using the Sinkhorn algorithm
 
 - The same algorithm from the course.
+- I made sliders in the below section to play with the lambda and epsilon values.
 """
 
 # ╔═╡ 7601994f-d7d3-4be4-91ed-a823f14f4489
@@ -2352,6 +2357,6 @@ version = "0.9.1+5"
 # ╠═471b8d90-5b64-4fed-a074-47d42ed4e0e0
 # ╠═22a77c67-a0ed-434a-9db4-993cdce0c93b
 # ╠═ec53c559-044e-4287-8b44-1123fade583c
-# ╠═a6f86f24-604c-4cf5-ac46-cc7b18882277
+# ╟─a6f86f24-604c-4cf5-ac46-cc7b18882277
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002
