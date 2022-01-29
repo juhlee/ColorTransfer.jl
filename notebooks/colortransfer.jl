@@ -25,7 +25,10 @@ md"""
 """
 
 # ╔═╡ adf59de3-bc73-4d4c-9293-47a2f8569ee5
-imresize(load("../figs/colors_everywhere.jpg"), (350, 450))
+begin
+	imurl = "https://github.com/juhlee/imagebank/blob/main/colors_everywhere.jpg?raw=true"
+	imresize(load(download(imurl)), (350, 450))
+end
 
 # ╔═╡ 877f1fc5-2acd-48ad-87e3-0f28d9c9c9c7
 TableOfContents(title="Table of Contents 🔬", depth=2, aside=true)
@@ -758,20 +761,14 @@ colorscatter(colors; kwargs...) =
 
 # ╔═╡ a6f86f24-604c-4cf5-ac46-cc7b18882277
 @testset begin
-	a_filename = "../figs/nutshell.png"
+	a_file_url = "https://github.com/juhlee/imagebank/blob/main/nutshell.png?raw=true"
 
 	# Emulation of the function image_load()
-	a_img = load(a_filename)
+	a_img = load(download(a_file_url))
 	a_img = RGB.(a_img)
 
 	# Check if the image loaded is in the RGB color space
 	@test typeof(a_img) == Matrix{RGB{N0f8}}
-
-	# Test if local directory works
-	a_filename_2 = dirname(@__DIR__) * "/figs/nutshell.png"
-	a_img2 = load(a_filename_2)
-	a_img2 = RGB.(a_img2)
-	@test a_img2 == a_img
 	
 	# Check if the image_to_3Darray gives a 3D array with width x height x channel
 	a_array = image_to_3d_array(a_img)
@@ -2355,6 +2352,6 @@ version = "0.9.1+5"
 # ╠═471b8d90-5b64-4fed-a074-47d42ed4e0e0
 # ╠═22a77c67-a0ed-434a-9db4-993cdce0c93b
 # ╠═ec53c559-044e-4287-8b44-1123fade583c
-# ╟─a6f86f24-604c-4cf5-ac46-cc7b18882277
+# ╠═a6f86f24-604c-4cf5-ac46-cc7b18882277
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002
