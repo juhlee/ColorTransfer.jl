@@ -35,7 +35,7 @@ begin
 end
 
 # ╔═╡ 877f1fc5-2acd-48ad-87e3-0f28d9c9c9c7
-TableOfContents(title="Table of Contents 🔬", depth=2, aside=true)
+TableOfContents(title="Table of Contents 🔬", depth=2, aside=false)
 
 # ╔═╡ 7d867d3b-ff9b-42dd-818d-c314a977b448
 md""" --- """
@@ -55,8 +55,8 @@ In chapter 6, we learned the concept of **optimal transportation**, and saw that
 md"""
 ##### What to expect different from the one we implemented in the course?
 
-- The images will be processed in form of an **Array** (Height x Width x Channels) instead of a complete dependence on the package Colors.jl.
-- The color schemees in the images are **clustered** = instead of the whole pixels, only the clustered color schemes go through optimal transportation.
+- The images will be processed in the form of an **Array** (Height x Width x Channels) instead of a complete dependence on the package Colors.jl.
+- The color schemes in the images are **clustered** = instead of the whole pixels, only the clustered color schemes go through optimal transportation.
 - Thus, codes run **much faster** even **without sub-sampling** of the images.
 - Different ways to calculate the color differences **(distances)**
 - Different **weights** assigned to each pixels, whereas we gave an uniform distribution in the course.
@@ -208,11 +208,6 @@ md"""
 ---
 """
 
-# ╔═╡ 58276c9d-a3d9-436b-aa59-7e05662ac0ff
-md"""
-##### 2.4. Repeat for the image2
-"""
-
 # ╔═╡ 2ace44bb-085e-4979-b2d7-c21272df21d6
 md"""
 ## 3. Images after the clustering
@@ -277,7 +272,7 @@ md"""
 md"""
 #### 4.1. Cost matrix calculation
 
-- By default, **Squared eucledian distances** are calculated between cluster centers of two images.
+- By default, **Squared euclidian distances** are calculated between cluster centers of two images.
 
 - Below are provided a few other distance calculation. Feel free to experiment how different distance metrics affect the color transfer.
 """
@@ -522,23 +517,21 @@ begin
 end
 
 # ╔═╡ 441e5c0f-85bf-43a3-9b34-d21fbba4dc70
-im1res = kmeans(img1array, n_cluster)
+begin
+	im1res = kmeans(img1array, n_cluster)
+	im2res = kmeans(img2array, n_cluster)
+end
 
 # ╔═╡ 00b81e4d-937b-4e00-83b8-abcbfcc7fcbe
-im1_centers = im1res.centers
+begin
+	im1_centers = im1res.centers
+	im2_centers = im2res.centers
+end
 
 # ╔═╡ 6d565196-b737-44e7-ae7f-1f407bd3f6b7
-im1_counts = im1res.counts
-
-# ╔═╡ 2f84f436-d552-4923-99e6-7362945a7ef7
-im1_assigns = im1res.assignments
-
-# ╔═╡ 200c0296-80c3-40b4-a7e0-b84fc4e4fb97
 begin
-	im2res = kmeans(img2array, n_cluster)
-	im2_centers = im2res.centers
+	im1_counts = im1res.counts
 	im2_counts = im2res.counts
-	im2_assigns = im2res.assignments
 end
 
 # ╔═╡ e5b7dd1c-38aa-4a2e-b8c0-92fa0c455334
@@ -549,6 +542,12 @@ begin
 	# Normalizing each cluster with height x weight.
 	a_col = im1_counts / (h * w)
 	b_col = im2_counts / (h2 * w2)
+end
+
+# ╔═╡ 2f84f436-d552-4923-99e6-7362945a7ef7
+begin
+	im1_assigns = im1res.assignments
+	im2_assigns = im2res.assignments
 end
 
 # ╔═╡ b7b24b81-81a6-43e9-ac47-854f8d4c8680
@@ -581,7 +580,7 @@ begin
 end
 
 # ╔═╡ c124013f-16e5-4631-84c2-67a86ef224a2
-function reassinging(img_array::Array, centers::Matrix, assignments::Vector)
+function reassigning(img_array::Array, centers::Matrix, assignments::Vector)
 	"""
 	Function for assigning center cluster values back to the original image.
 
@@ -609,7 +608,7 @@ end
 # ╔═╡ a5d95227-8dbc-4323-bec8-3c66803d4034
 begin
 	# Reassign the center clusters to 3D array
-	im1_clust = reassinging(img1array3D, im1_centers, im1_assigns)
+	im1_clust = reassigning(img1array3D, im1_centers, im1_assigns)
 	# Convert the array back to an image.
 	im1_clust_view = colorview(RGB, permutedims(im1_clust, (3,1,2)))
 
@@ -620,7 +619,7 @@ end
 # ╔═╡ bde7b3a1-1554-43af-9108-609b286c8e37
 begin
 	# Same procedures from above.
-	im2_clust = reassinging(img2array3D, im2_centers, im2_assigns)
+	im2_clust = reassigning(img2array3D, im2_centers, im2_assigns)
 	im2_clust_view = colorview(RGB, permutedims(im2_clust, (3,1,2)))
 
 	[image2; im2_clust_view]
@@ -735,7 +734,7 @@ im1_centers_n = transport_colors(im1_centers, im2_centers, Pcolors)
 # ╔═╡ 3ab4bb47-a09c-4293-bcf0-8727287aac74
 begin
 	# Reassigning the cluster centers back to the original image
-	im1_transf = reassinging(img1array3D, im1_centers_n, im1_assigns)
+	im1_transf = reassigning(img1array3D, im1_centers_n, im1_assigns)
 	im1_transf_view = colorview(RGB, permutedims(im1_transf, (3,1,2))) * k
 end
 
@@ -748,7 +747,7 @@ im2_centers_n = transport_colors(im2_centers, im1_centers, Pcolors') # Pcolors t
 # ╔═╡ e785cd6d-5ee6-4b31-82f9-5d0f4ed0c4f6
 begin
 	# Reassigning the mapped cluster centers back to the original image
-	im2_transf = reassinging(img2array3D, im2_centers_n, im2_assigns)
+	im2_transf = reassigning(img2array3D, im2_centers_n, im2_assigns)
 	im2_transf_view = colorview(RGB, permutedims(im2_transf, (3,1,2))) * k2
 end
 
@@ -1759,8 +1758,6 @@ uuid = "3f19e933-33d8-53b3-aaab-bd5110c3b7a0"
 # ╟─7b865f98-a124-4c9e-884c-a6744ea7ca0d
 # ╠═2f84f436-d552-4923-99e6-7362945a7ef7
 # ╟─24611539-ba22-483d-8be3-b79314a67dcc
-# ╟─58276c9d-a3d9-436b-aa59-7e05662ac0ff
-# ╠═200c0296-80c3-40b4-a7e0-b84fc4e4fb97
 # ╟─2ace44bb-085e-4979-b2d7-c21272df21d6
 # ╟─4dbae5a4-1417-49c8-800c-227d37ad1f8f
 # ╟─4b9955f2-0900-41c7-aecc-193477f9ac7f
